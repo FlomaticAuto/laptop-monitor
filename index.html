@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaptopMonitor -- LAPTOP-KONA8P10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0d1117;
+    --surface: #161b22;
+    --border:  #30363d;
+    --text:    #c9d1d9;
+    --muted:   #8b949e;
+    --green:   #3fb950;
+    --amber:   #d29922;
+    --red:     #f85149;
+    --blue:    #58a6ff;
+  }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px; line-height: 1.6;
+    padding: 24px; max-width: 1300px; margin: 0 auto;
+  }
+  h1 { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  h2 { font-size: 15px; font-weight: 600; color: #fff; margin: 0 0 14px; }
+  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+  .cards {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 16px; margin-bottom: 28px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px;
+  }
+  .card-label {
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted); margin-bottom: 6px;
+  }
+  .card-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 34px; font-weight: 600; line-height: 1; margin-bottom: 10px;
+  }
+  .bar-wrap { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .bar { height: 100%; border-radius: 3px; }
+  .section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; margin-bottom: 24px;
+  }
+  .chart-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .chart-wrap { position: relative; height: 220px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    text-align: left; color: var(--muted); font-size: 11px;
+    text-transform: uppercase; letter-spacing: .06em;
+    padding: 6px 8px; border-bottom: 1px solid var(--border); font-weight: 500;
+  }
+  tbody tr:hover { background: rgba(255,255,255,.03); }
+  tbody td {
+    padding: 5px 8px; border-bottom: 1px solid #21262d;
+    font-family: 'JetBrains Mono', monospace; vertical-align: middle;
+  }
+  tbody td.pub { font-family: 'Inter', sans-serif; color: var(--muted); }
+  .tiles { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .tile {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 14px;
+  }
+  .tile-title { font-weight: 600; font-size: 13px; color: #fff; margin-bottom: 4px; }
+  .tile-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .tile-cmd {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: var(--border); color: var(--blue);
+    padding: 2px 6px; border-radius: 3px;
+    display: inline-block; margin-top: 6px;
+  }
+  .meta-pill {
+    display: inline-block; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    background: var(--border); color: var(--muted);
+    padding: 2px 8px; border-radius: 12px; margin-right: 6px;
+  }
+  footer {
+    margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 12px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>LaptopMonitor</h1>
+<p class="subtitle">
+  <strong>LAPTOP-KONA8P10</strong> &nbsp;|&nbsp; 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz &nbsp;|&nbsp; Uptime: 105.1h
+  &nbsp;|&nbsp;
+  <span class="meta-pill">History: 0 days</span>
+  <span class="meta-pill">Samples: 3 x 30min</span>
+</p>
+
+<!-- Live stat cards -->
+<div class="cards">
+  <div class="card">
+    <div class="card-label">CPU Load (now)</div>
+    <div class="card-value" style="color:#f85149">90%</div>
+    <div class="bar-wrap"><div class="bar" style="width:90%;background:#f85149"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Memory Used (now)</div>
+    <div class="card-value" style="color:#f85149">95.6%</div>
+    <div class="bar-wrap"><div class="bar" style="width:96%;background:#f85149"></div></div>
+    <div style="margin-top:6px;color:var(--muted);font-size:12px">15354 MB / 16058 MB</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Disk C: Used (now)</div>
+    <div class="card-value" style="color:#d29922">74.1%</div>
+    <div class="bar-wrap"><div class="bar" style="width:74%;background:#d29922"></div></div>
+    <div style="margin-top:6px;color:var(--muted);font-size:12px">340.6 GB / 459.4 GB</div>
+  </div>
+</div>
+
+<!-- Continuous performance graphs -->
+<div class="section">
+  <h2>Performance History (all time, 30-min averages)</h2>
+  <div class="chart-grid">
+
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'JetBrains Mono',monospace">CPU Usage %</div>
+      <div class="chart-wrap"><canvas id="chartCpu"></canvas></div>
+    </div>
+
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'JetBrains Mono',monospace">RAM Used %</div>
+      <div class="chart-wrap"><canvas id="chartRam"></canvas></div>
+    </div>
+
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'JetBrains Mono',monospace">Disk Activity %</div>
+      <div class="chart-wrap"><canvas id="chartDisk"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Top 30 processes -->
+<div class="section">
+  <h2>Top 30 Processes by RAM (snapshot at report time)</h2>
+  <table>
+    <thead><tr><th>Name</th><th>RAM</th><th>CPU Seconds</th><th>Threads</th><th>Publisher</th></tr></thead>
+    <tbody><tr><td>Code</td><td style='color:#d29922'>1144.4 MB</td><td>1523.1</td><td>11</td><td class='pub'>-</td></tr>
+<tr><td>msedge</td><td style='color:#c9d1d9'>619.3 MB</td><td>249.1</td><td>23</td><td class='pub'>-</td></tr>
+<tr><td>Code</td><td style='color:#c9d1d9'>486 MB</td><td>1183.7</td><td>26</td><td class='pub'>-</td></tr>
+<tr><td>chrome</td><td style='color:#c9d1d9'>344.2 MB</td><td>247.9</td><td>22</td><td class='pub'>-</td></tr>
+<tr><td>node</td><td style='color:#c9d1d9'>299.9 MB</td><td>89979.9</td><td>35</td><td class='pub'>-</td></tr>
+<tr><td>Wispr Flow</td><td style='color:#c9d1d9'>232.7 MB</td><td>3092.7</td><td>52</td><td class='pub'>-</td></tr>
+<tr><td>msedgewebview2</td><td style='color:#c9d1d9'>204.5 MB</td><td>3582.6</td><td>26</td><td class='pub'>-</td></tr>
+<tr><td>Code</td><td style='color:#c9d1d9'>201.1 MB</td><td>554.7</td><td>17</td><td class='pub'>-</td></tr>
+<tr><td>Memory Compression</td><td style='color:#c9d1d9'>191 MB</td><td>7608.3</td><td>286</td><td class='pub'>-</td></tr>
+<tr><td>Notion</td><td style='color:#c9d1d9'>183.4 MB</td><td>3076.4</td><td>22</td><td class='pub'>-</td></tr>
+<tr><td>Code</td><td style='color:#c9d1d9'>178.9 MB</td><td>1255.7</td><td>20</td><td class='pub'>-</td></tr>
+<tr><td>msedge</td><td style='color:#c9d1d9'>176 MB</td><td>113.7</td><td>64</td><td class='pub'>-</td></tr>
+<tr><td>chrome</td><td style='color:#c9d1d9'>175.4 MB</td><td>834.1</td><td>52</td><td class='pub'>-</td></tr>
+<tr><td>OneDrive.Sync.Service</td><td style='color:#c9d1d9'>168.1 MB</td><td>33029</td><td>24</td><td class='pub'>-</td></tr>
+<tr><td>claude</td><td style='color:#c9d1d9'>164.8 MB</td><td>61.7</td><td>28</td><td class='pub'>-</td></tr>
+<tr><td>chrome</td><td style='color:#c9d1d9'>162.3 MB</td><td>64.7</td><td>20</td><td class='pub'>-</td></tr>
+<tr><td>aswidsagent</td><td style='color:#c9d1d9'>151.4 MB</td><td>177328.5</td><td>39</td><td class='pub'>-</td></tr>
+<tr><td>chrome</td><td style='color:#c9d1d9'>150.2 MB</td><td>146.1</td><td>25</td><td class='pub'>-</td></tr>
+<tr><td>NortonSvc</td><td style='color:#c9d1d9'>150 MB</td><td>55917.4</td><td>194</td><td class='pub'>-</td></tr>
+<tr><td>OneDrive</td><td style='color:#c9d1d9'>149.9 MB</td><td>23955.6</td><td>40</td><td class='pub'>-</td></tr>
+<tr><td>Code</td><td style='color:#c9d1d9'>148.7 MB</td><td>231.4</td><td>20</td><td class='pub'>-</td></tr>
+<tr><td>msedge</td><td style='color:#c9d1d9'>140.7 MB</td><td>48.2</td><td>26</td><td class='pub'>-</td></tr>
+<tr><td>msedge</td><td style='color:#c9d1d9'>135.1 MB</td><td>2.5</td><td>21</td><td class='pub'>-</td></tr>
+<tr><td>Code</td><td style='color:#c9d1d9'>117.7 MB</td><td>423.1</td><td>74</td><td class='pub'>-</td></tr>
+<tr><td>claude</td><td style='color:#c9d1d9'>110.7 MB</td><td>139.7</td><td>26</td><td class='pub'>-</td></tr>
+<tr><td>Code</td><td style='color:#c9d1d9'>105 MB</td><td>324.1</td><td>19</td><td class='pub'>-</td></tr>
+<tr><td>explorer</td><td style='color:#c9d1d9'>99.1 MB</td><td>13848</td><td>156</td><td class='pub'>-</td></tr>
+<tr><td>claude</td><td style='color:#c9d1d9'>85.7 MB</td><td>3075.2</td><td>61</td><td class='pub'>-</td></tr>
+<tr><td>aswEngSrv</td><td style='color:#c9d1d9'>85.4 MB</td><td>2017.6</td><td>37</td><td class='pub'>-</td></tr>
+<tr><td>Notion</td><td style='color:#c9d1d9'>84.6 MB</td><td>92.9</td><td>20</td><td class='pub'>-</td></tr></tbody>
+  </table>
+</div>
+
+<!-- Quick wins -->
+<div class="section">
+  <h2>Quick Wins</h2>
+  <div class="tiles">
+    <div class="tile">
+      <div class="tile-title">Disable Startup Bloat</div>
+      <div class="tile-body">Task Manager Startup tab -- disable Teams, OneDrive, Spotify, Discord, Adobe updaters.
+        <div class="tile-cmd">taskmgr</div>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="tile-title">Audit Running Services</div>
+      <div class="tile-body">Set non-essential services to Manual: Fax, Print Spooler, Xbox services.
+        <div class="tile-cmd">services.msc</div>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="tile-title">Reduce Visual Effects</div>
+      <div class="tile-body">Adjust for best performance -- disables animations and frees CPU cycles.
+        <div class="tile-cmd">sysdm.cpl</div>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="tile-title">Set High Performance Plan</div>
+      <div class="tile-body">Prevents CPU throttling. Switch from Balanced to High Performance.
+        <div class="tile-cmd">powercfg.cpl</div>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="tile-title">Schedule AV Scans Off-Hours</div>
+      <div class="tile-body">Reschedule Defender full scans to 02:00-04:00 to avoid work-hour hits.
+        <div class="tile-cmd">Windows Security</div>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="tile-title">Control Windows Update</div>
+      <div class="tile-body">Set Active Hours so update activity stays away from your work time.
+        <div class="tile-cmd">Settings - Windows Update</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>LAPTOP-KONA8P10 -- Report generated: 2026-05-25 16:36:18</span>
+  <span>Next scheduled run: 2026-05-26 07:00</span>
+</footer>
+
+<script>
+// ---- shared chart config --------------------------------------------------
+const GRID   = '#30363d';
+const MUTED  = '#8b949e';
+const GREEN  = '#3fb950';
+const AMBER  = '#d29922';
+const RED    = '#f85149';
+const BLUE   = '#58a6ff';
+const PURPLE = '#bc8cff';
+
+function colorForValue(v, warn, crit) {
+  if (v >= crit) return RED;
+  if (v >= warn) return AMBER;
+  return GREEN;
+}
+
+function makeChart(id, label, data, color, warn, crit) {
+  const ctx = document.getElementById(id).getContext('2d');
+
+  // Apply per-point color based on thresholds
+  const pointColors = data.map(p => colorForValue(p.y, warn, crit));
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: label,
+        data: data,
+        borderColor: color,
+        backgroundColor: color + '18',
+        borderWidth: 1.5,
+        pointRadius: data.length > 200 ? 0 : 2,
+        pointHoverRadius: 4,
+        pointBackgroundColor: pointColors,
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#161b22',
+          borderColor: '#30363d',
+          borderWidth: 1,
+          titleColor: '#c9d1d9',
+          bodyColor: '#8b949e',
+          callbacks: {
+            label: ctx => label + ': ' + ctx.parsed.y.toFixed(1) + '%'
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            tooltipFormat: 'yyyy-MM-dd HH:mm',
+            displayFormats: {
+              hour:  'HH:mm',
+              day:   'MMM d',
+              week:  'MMM d',
+              month: 'MMM yyyy'
+            }
+          },
+          grid:  { color: GRID },
+          ticks: { color: MUTED, maxTicksLimit: 12, font: { family: 'JetBrains Mono', size: 10 } }
+        },
+        y: {
+          min: 0,
+          max: 100,
+          grid:  { color: GRID },
+          ticks: {
+            color: MUTED,
+            font: { family: 'JetBrains Mono', size: 10 },
+            callback: v => v + '%'
+          }
+        }
+      }
+    }
+  });
+}
+
+// ---- inject data and build charts -----------------------------------------
+const cpuData  = [{"x":"2026-05-25T15:30:00","y":68,7},{"x":"2026-05-25T16:00:00","y":96,7},{"x":"2026-05-25T16:30:00","y":97,3}];
+const ramData  = [{"x":"2026-05-25T15:30:00","y":95,2},{"x":"2026-05-25T16:00:00","y":96,5},{"x":"2026-05-25T16:30:00","y":96,6}];
+const diskData = [{"x":"2026-05-25T15:30:00","y":54,1},{"x":"2026-05-25T16:00:00","y":187,5},{"x":"2026-05-25T16:30:00","y":318,4}];
+
+makeChart('chartCpu',  'CPU',  cpuData,  BLUE,   60, 80);
+makeChart('chartRam',  'RAM',  ramData,  PURPLE, 70, 85);
+makeChart('chartDisk', 'Disk', diskData, AMBER,  60, 80);
+</script>
+
+</body>
+</html>
