@@ -41,8 +41,8 @@ from playwright.sync_api import sync_playwright
 # ---------------------------------------------------------------------------
 DEFAULT_REPORT = r"C:\LaptopMonitor\index.html"
 
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8178468013:AAGuGvX2WOd14SuKlz1Ncmt9TrLwuo8ryTg")
-CHAT_ID   = os.environ.get("TELEGRAM_CHAT_ID",   "8042233389")
+BOT_TOKEN = os.environ.get("LM_TELEGRAM_BOT_TOKEN", "8178468013:AAGuGvX2WOd14SuKlz1Ncmt9TrLwuo8ryTg")
+CHAT_ID   = os.environ.get("LM_TELEGRAM_CHAT_ID",   "8042233389")
 
 # Sections to capture: (CSS selector, caption)
 SECTIONS = [
