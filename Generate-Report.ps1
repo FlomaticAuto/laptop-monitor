@@ -194,10 +194,10 @@ $diskPct    = [Math]::Round(($diskUsedGB / $diskTotGB) * 100, 1)
 Write-OK ("CPU {0}% | RAM {1}/{2} MB ({3}%) | Disk {4}/{5} GB ({6}%)" -f
           $cpuLoadPct, $usedRamMB, $totalRamMB, $ramPct, $diskUsedGB, $diskTotGB, $diskPct)
 
-# Top 30 processes
+# Top 10 processes
 $procRows = Get-Process |
     Sort-Object WorkingSet64 -Descending |
-    Select-Object -First 30 |
+    Select-Object -First 10 |
     ForEach-Object {
         $company = ''
         try { $company = $_.Company } catch {}
@@ -421,10 +421,10 @@ $html = @"
 <!-- Continuous performance graphs -->
 <div class="section">
   <div class="section-header">
-    <h2 id="history-title">Performance History — last 7 days</h2>
+    <h2 id="history-title">Performance History — 24 hours</h2>
     <div class="filter-bar">
-      <button class="filter-btn"        data-days="1"   onclick="applyFilter(1)">1D</button>
-      <button class="filter-btn active" data-days="7"   onclick="applyFilter(7)">7D</button>
+      <button class="filter-btn active" data-days="1"   onclick="applyFilter(1)">1D</button>
+      <button class="filter-btn"        data-days="7"   onclick="applyFilter(7)">7D</button>
       <button class="filter-btn"        data-days="30"  onclick="applyFilter(30)">30D</button>
       <button class="filter-btn"        data-days="90"  onclick="applyFilter(90)">90D</button>
       <button class="filter-btn"        data-days="365" onclick="applyFilter(365)">1Y</button>
@@ -453,7 +453,7 @@ $html = @"
 
 <!-- Top 30 processes -->
 <div class="section">
-  <h2>Top 30 Processes by RAM (snapshot at report time)</h2>
+  <h2>Top 10 Processes by RAM (snapshot at report time)</h2>
   <table>
     <thead><tr><th>Name</th><th>RAM</th><th>CPU Seconds</th><th>Threads</th><th>Publisher</th></tr></thead>
     <tbody>$procHtml</tbody>
@@ -656,10 +656,10 @@ function applyFilter(days) {
   });
 }
 
-// Default: 7-day view
-makeChart('chartCpu',  7);
-makeChart('chartRam',  7);
-makeChart('chartDisk', 7);
+// Default: last 24 hours (last full day of detail)
+makeChart('chartCpu',  1);
+makeChart('chartRam',  1);
+makeChart('chartDisk', 1);
 </script>
 
 </body>
