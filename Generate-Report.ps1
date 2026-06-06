@@ -682,6 +682,16 @@ if (Test-Path $publishScript) {
     Write-Warn "Publish-Report.ps1 not found -- skipping GitHub push."
 }
 
+# ---------- Telegram report -------------------------------------------------
+Write-Step "Sending Telegram report"
+$telegramScript = Join-Path $PSScriptRoot 'Send-TelegramReport.py'
+if (-not (Test-Path $telegramScript)) { $telegramScript = 'C:\Projects\LaptopMonitor\Send-TelegramReport.py' }
+if (Test-Path $telegramScript) {
+    python $telegramScript --report $ReportFile
+} else {
+    Write-Warn "Send-TelegramReport.py not found -- skipping Telegram."
+}
+
 # ---------- Summary ---------------------------------------------------------
 Write-Host ""
 Write-Host "================================================" -ForegroundColor Magenta
