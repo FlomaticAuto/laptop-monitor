@@ -108,9 +108,9 @@ def screenshot_sections(report_path: str) -> list[tuple[str, str]]:
         page = browser.new_page(viewport={"width": 1200, "height": 900})
         page.goto(file_url, wait_until="networkidle")
 
-        # Click "All" filter so charts show full history in the screenshot
+        # Click "7D" so screenshots always show a full week minimum
         try:
-            page.click('.filter-btn[data-days="0"]')
+            page.click('.filter-btn[data-days="7"]')
             page.wait_for_timeout(400)
         except Exception:
             pass

@@ -421,10 +421,10 @@ $html = @"
 <!-- Continuous performance graphs -->
 <div class="section">
   <div class="section-header">
-    <h2 id="history-title">Performance History — 24 hours</h2>
+    <h2 id="history-title">Performance History — last 7 days</h2>
     <div class="filter-bar">
-      <button class="filter-btn active" data-days="1"   onclick="applyFilter(1)">1D</button>
-      <button class="filter-btn"        data-days="7"   onclick="applyFilter(7)">7D</button>
+      <button class="filter-btn"        data-days="1"   onclick="applyFilter(1)">1D</button>
+      <button class="filter-btn active" data-days="7"   onclick="applyFilter(7)">7D</button>
       <button class="filter-btn"        data-days="30"  onclick="applyFilter(30)">30D</button>
       <button class="filter-btn"        data-days="90"  onclick="applyFilter(90)">90D</button>
       <button class="filter-btn"        data-days="365" onclick="applyFilter(365)">1Y</button>
@@ -656,10 +656,10 @@ function applyFilter(days) {
   });
 }
 
-// Default: last 24 hours (last full day of detail)
-makeChart('chartCpu',  1);
-makeChart('chartRam',  1);
-makeChart('chartDisk', 1);
+// Default: last 7 days — minimum meaningful window
+makeChart('chartCpu',  7);
+makeChart('chartRam',  7);
+makeChart('chartDisk', 7);
 </script>
 
 </body>
